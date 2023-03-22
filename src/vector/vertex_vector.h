@@ -82,8 +82,9 @@ public:
   {
     LOG.debug("Allocating mirrors (sink=%u) ... \n", sink);
 
-    for (auto& vseg : own_segs)
-      vseg.allocate_mirrors<sink>();  // outgoing
+    for (auto& vseg : own_segs) {
+      vseg.template allocate_mirrors<sink>();  // outgoing
+    }
 
     MirrorSegments*& mir_segs = sink ? mir_segs_snk : mir_segs_reg;
 

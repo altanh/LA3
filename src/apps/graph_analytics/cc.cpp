@@ -21,7 +21,7 @@ void run(std::string filepath, vid_t nvertices)
   vp.execute();  // until convergence
   timer.stop();
 
-  vp.display();
+  vp.display(G.get_nvertices());
   timer.report();
 
   long checksum = vp.reduce<long>(

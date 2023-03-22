@@ -97,8 +97,8 @@ void Graph<Weight>::load_binary(
       exit(1);
     }
 
-    nvertices_left = nrows = header.row + 1;  // HACK: (the "+ 1"; for one/zero-based)
-    nvertices_right = ncols = header.col + 1;  // HACK: (the "+ 1"; for one/zero-based)
+    nvertices_left = nrows = header.row + 1;
+    nvertices_right = ncols = header.col + 1;
     nedges = header.weight;
 
     LOG.info("Read header: nvertices = %u, mvertices = %u, nedges (nnz) = %lu \n",
@@ -109,6 +109,9 @@ void Graph<Weight>::load_binary(
       nvertices = nrows + ncols;
       nvertices_left = nrows;
       nvertices_right = ncols;
+    } else {
+      assert(header.row == header.col);
+      nvertices = header.row + 1;
     }
 
     // Let offset and filesize reflect the body of the file.
@@ -117,6 +120,8 @@ void Graph<Weight>::load_binary(
   }
 
   uint64_t ntriples = (orig_filesize - offset) / sizeof(Triple<Weight>);
+
+  LOG.info("sizeof(Triple<Weight>) = %lu \n", sizeof(Triple<Weight>));
 
   LOG.info("File appears to have %lu edges (%u-byte weights). \n",
            ntriples, sizeof(Triple<Weight>) - sizeof(Triple<Empty>));
